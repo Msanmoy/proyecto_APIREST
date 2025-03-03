@@ -11,7 +11,8 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Tarea {
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+public class Tarea implements Comparable<Tarea>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,4 +21,12 @@ public class Tarea {
     private LocalDate fechaEntrega;
     @ManyToOne
     private Asignatura asignatura;
+
+    @Override
+    public int compareTo(Tarea o) {
+        return this.titulo.compareTo(o.getTitulo());
+    }
+
+
+
 }
