@@ -1,57 +1,69 @@
 package com.iesvdm.proyectoapi.controller;
 
 import com.iesvdm.proyectoapi.domain.Usuario;
-import com.iesvdm.proyectoapi.repository.UsuarioRepository;
+import com.iesvdm.proyectoapi.services.UsuarioService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 
+@Slf4j
 @RestController
-@RequestMapping("usuarios")
+@RequestMapping("/v1/api/usuarios")
 public class UsuarioController {
-    @Autowired
-    private UsuarioRepository repository;
 
-    @GetMapping
-    public Page<Usuario> obtenerTodos(@RequestParam Optional<String> nombre,
-                                      @RequestParam Optional<Integer> page,
-                                      @RequestParam Optional<String> sortBy) {
-        Pageable pageable = PageRequest.of(page.orElse(0), 10, Sort.by(sortBy.orElse("id")));
-        return nombre.map(n -> repository.findByNombreContainingIgnoreCase(n, pageable))
-                .orElse(repository.findAll(pageable));
+    private final UsuarioService usuarioService;
+
+    @Autowired
+    public UsuarioController(UsuarioService usuarioService) {this.usuarioService = usuarioService;}
+
+    @GetMapping(value = {"","/"}, params = {"!buscar"})
+    public Page<Usuario> all(Pageable pageable) {
+        log.info("Accediendo a todos los usuarios");
+        return this.usuarioService.all(pageable);
     }
 
-    @PostMapping
-    public Usuario crear(@RequestBody Usuario entity) { return repository.save(entity); }
+    @GetMapping({"","/"})
+    public Page<Usuario> all(@RequestParam("buscar") String buscar,
+                             Pageable pageable) {
+        log.info("Accediendo todos los usuario");
+        return this.usuarioService.allByFilter(buscar,pageable);
+    }
+
+    @PostMapping({"","/"})
+    public Usuario save(@RequestBody Usuario usuario){
+        log.info("Guardando un usuario");
+        return this.usuarioService.crearUsuario(usuario);
+    }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> obtenerPorId(@PathVariable Long id) {
-        return repository.findById(id).map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public Usuario one(@PathVariable("id") long id) {
+        return this.usuarioService.one(id);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> actualizar(@PathVariable Long id, @RequestBody Usuario entity) {
-        return repository.findById(id).map(e -> {
-            e.setNombre(entity.getNombre());
-            e.setEmail(entity.getEmail());
-            e.setRol(entity.getRol());
-            return ResponseEntity.ok(repository.save(e));
-        }).orElse(ResponseEntity.notFound().build());
+    public Usuario replace(@PathVariable("id") long id, @RequestBody Usuario usuario) {
+        return this.usuarioService.replace(id, usuario);
+    }
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PutMapping("/cambiarContrasenia")
+    public void cambiarContrasenia(@RequestBody Usuario usuario, String newPassword) {
+        usuario.setPassword(newPassword);
+        log.info("La contraseña ha sido cambiada");
     }
 
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
-        if (repository.existsById(id)) {
-            repository.deleteById(id);
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+    public void delete(@PathVariable("id") long id) {
+        this.usuarioService.delete(id);
+        log.info("El usuario con id +" + id + " ha sido eliminado de la base de datos");
     }
+
 }
