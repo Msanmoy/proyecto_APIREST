@@ -4,7 +4,6 @@ import com.iesvdm.proyectoapi.domain.*;
 import com.iesvdm.proyectoapi.enums.Rol;
 import com.iesvdm.proyectoapi.exception.NotFoundException;
 import com.iesvdm.proyectoapi.repository.*;
-import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.*;
@@ -44,8 +43,15 @@ public class UsuarioService {
     }
 
     public Usuario replace(Long id, Usuario usuario) {
-        return this.usuarioRepository.findById(id).map(
-                p -> (id.equals(usuario.getId()) && p.getRol().equals(Rol.PROFESOR) ? this.usuarioRepository.save(usuario) : null))
+        return this.usuarioRepository.findById(id).map(usuario1 -> {
+            usuario1.setId(usuario.getId());
+            usuario1.setNombre(usuario.getNombre());
+            usuario1.setApellidos(usuario.getApellidos());
+            usuario1.setEmail(usuario.getEmail());
+            usuario1.setPassword(usuario.getPassword());
+            usuario1.setRol(usuario.getRol());
+            return usuarioRepository.save(usuario1);
+        })
                 .orElseThrow(() -> new NotFoundException(id, "usuario"));
     }
 
@@ -60,5 +66,10 @@ public class UsuarioService {
             this.usuarioRepository.delete(e);
             return e;
         }).orElseThrow(() -> new NotFoundException(id, "usuario"));
+    }
+
+    public void deleteAll() {
+        this.usuarioRepository.deleteAll();
+        System.out.println("Todos los usuarios han sido eliminados de la base de datos");
     }
 }

@@ -1,6 +1,7 @@
 package com.iesvdm.proyectoapi.controller;
 
 import com.iesvdm.proyectoapi.domain.Usuario;
+import com.iesvdm.proyectoapi.repository.UsuarioRepository;
 import com.iesvdm.proyectoapi.services.UsuarioService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +30,7 @@ public class UsuarioController {
     }
 
     @GetMapping({"","/"})
-    public Page<Usuario> all(@RequestParam("buscar") String buscar,
-                             Pageable pageable) {
+    public Page<Usuario> all(@RequestParam("buscar") String buscar,Pageable pageable) {
         log.info("Accediendo todos los usuario");
         return this.usuarioService.allByFilter(buscar,pageable);
     }
@@ -65,5 +65,14 @@ public class UsuarioController {
         this.usuarioService.delete(id);
         log.info("El usuario con id +" + id + " ha sido eliminado de la base de datos");
     }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping({"", "/"})
+    public void deleteAll() {
+        usuarioService.deleteAll();
+        log.info("Todos los usuarios han sido eliminados de la base de datos");
+    }
+
 
 }
