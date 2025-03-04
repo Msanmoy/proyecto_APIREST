@@ -16,10 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
+import static org.junit.jupiter.api.Assertions.*;
 
 
 @SpringBootTest
@@ -117,22 +114,64 @@ class ProyectoApiApplicationTests {
         usuarioNuevo.setPassword("123456");
         usuarioNuevo.setRol(Rol.PROFESOR);
 
-        usuarioRepository.save(usuarioNuevo);
+        Pageable pageable = PageRequest.of(0,10);
 
+        Usuario usuario = usuarioController.all(pageable).getContent().getFirst();
 
-        Usuario usuarioResultado = usuarioController.replace(1, usuarioNuevo);
+        Usuario usuarioResultado = usuarioController.replace(usuario.getId(), usuarioNuevo);
 
         assertNotNull(usuarioResultado);
         assertEquals("Actualizado", usuarioResultado.getNombre());
         assertEquals("Actualizado", usuarioResultado.getApellidos());
         assertEquals("actualizado@g.educaand.es", usuarioResultado.getEmail());
 
-        Usuario usuarioDB = usuarioRepository.findById(4L).orElse(null);
+        Usuario usuarioDB = usuarioRepository.findById(usuario.getId()).orElse(null);
         assertNotNull(usuarioDB);
         assertEquals("Actualizado", usuarioDB.getApellidos());
     }
 
 
+    @Test
+    void testCambiarContrasenia() {
+        String contraseniaNueva = "654321";
+        Usuario usuario1 = usuarioController.one(usuarioService.one("prueba2@g.educaand.es").getId());
+
+        String contraseniaAntigua = usuario1.getPassword();
+
+        usuarioController.cambiarContrasenia(usuario1, contraseniaNueva);
+
+        usuario1 = usuarioController.one(usuarioService.one("prueba2@g.educaand.es").getId());
+
+        assertNotNull(usuario1);
+        assertEquals(contraseniaNueva, usuario1.getPassword());
+        assertNotEquals(contraseniaAntigua, usuario1.getPassword());
+    }
+
+    @Test
+    void testBorrarUsuario() {
+        Pageable pageable1 = PageRequest.of(0, 3);
+        Page<Usuario> pagina1 = usuarioController.all(pageable1);
+        usuarioController.delete(usuarioService.one("prueba3@g.educaand.es").getId());
+        Page<Usuario> pagina2 = usuarioController.all(pageable1);
+
+        assertNotNull(pagina1);
+        assertNotNull(pagina2);
+        assertNotEquals(pagina1, pagina2);
+
+    }
+
+    @Test
+    void testBorrarTodosUsuarios() {
+        Pageable pageable1 = PageRequest.of(0, 3);
+        Page<Usuario> pagina1 = usuarioController.all(pageable1);
+
+        usuarioController.deleteAll();
+
+        pagina1 = usuarioController.all(pageable1);
+
+        assertEquals(0, pagina1.getTotalElements());
+
+    }
 
 
 

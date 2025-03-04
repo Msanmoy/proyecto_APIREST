@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -49,12 +50,22 @@ public class UsuarioController {
     @PutMapping("/{id}")
     public Usuario replace(@PathVariable("id") long id, @RequestBody Usuario usuario) {
         return this.usuarioService.replace(id, usuario);
+
     }
     @ResponseBody
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/cambiarContrasenia")
     public void cambiarContrasenia(@RequestBody Usuario usuario, String newPassword) {
-        usuario.setPassword(newPassword);
+        String email = usuario.getEmail();
+        String password = usuario.getPassword();
+
+        if (!Objects.equals(password, newPassword)) {
+            usuarioService.cambiarContrasenia(email, newPassword);
+        } else {
+            log.info("Las constraseñas son identicas");
+        }
+
+
         log.info("La contraseña ha sido cambiada");
     }
 
@@ -63,7 +74,7 @@ public class UsuarioController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") long id) {
         this.usuarioService.delete(id);
-        log.info("El usuario con id +" + id + " ha sido eliminado de la base de datos");
+        log.info("El usuario con id" + id + " ha sido eliminado de la base de datos");
     }
 
     @ResponseBody

@@ -44,7 +44,6 @@ public class UsuarioService {
 
     public Usuario replace(Long id, Usuario usuario) {
         return this.usuarioRepository.findById(id).map(usuario1 -> {
-            usuario1.setId(usuario.getId());
             usuario1.setNombre(usuario.getNombre());
             usuario1.setApellidos(usuario.getApellidos());
             usuario1.setEmail(usuario.getEmail());
