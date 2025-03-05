@@ -57,7 +57,7 @@ public class UsuarioService {
     public void cambiarContrasenia(String email, String newPassword) {
         Usuario usuario = one(email);
         usuario.setPassword(newPassword);
-        this.usuarioRepository.save(usuario);
+        usuarioRepository.save(usuario);
     }
 
     public void delete(Long id) {
