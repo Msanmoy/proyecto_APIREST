@@ -1,5 +1,6 @@
 package com.iesvdm.proyectoapi.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.iesvdm.proyectoapi.enums.Rol;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -30,5 +31,9 @@ public class Usuario {
 
     @Enumerated(EnumType.STRING)
     private Rol rol;
+
+    @ManyToOne
+    @JsonIgnore
+    private Curso curso;
 
 }

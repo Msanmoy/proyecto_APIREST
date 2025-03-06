@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("asignaturas")
+@RequestMapping("/v1/api/asignaturas")
 public class AsignaturaController {
     @Autowired
     private AsignaturaRepository repository;

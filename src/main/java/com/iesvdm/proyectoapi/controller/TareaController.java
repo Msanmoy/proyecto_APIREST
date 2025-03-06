@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("tareas")
+@RequestMapping("/v1/api/tareas")
 public class TareaController {
     @Autowired
     private TareaRepository repository;

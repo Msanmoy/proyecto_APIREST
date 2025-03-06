@@ -17,4 +17,7 @@ public class Curso {
     private String nombre;
     @ManyToMany
     private Set<Asignatura> asignaturas;
+
+    @OneToMany(mappedBy = "curso")
+    private Set<Usuario> usuario;
 }

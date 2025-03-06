@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("cursos")
+@RequestMapping("/v1/api/cursos")
 public class CursoController {
     @Autowired
     private CursoRepository repository;

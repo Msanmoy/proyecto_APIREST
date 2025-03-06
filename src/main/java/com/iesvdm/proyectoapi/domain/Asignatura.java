@@ -15,6 +15,7 @@ public class Asignatura {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nombre;
+
     @ManyToMany(mappedBy = "asignaturas")
     private Set<Curso> cursos;
 }

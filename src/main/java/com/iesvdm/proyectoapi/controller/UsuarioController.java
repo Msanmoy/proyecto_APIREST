@@ -85,5 +85,11 @@ public class UsuarioController {
         log.info("Todos los usuarios han sido eliminados de la base de datos");
     }
 
+    @GetMapping("/nombreCurso/{id}")
+    public String getNombreCurso(@PathVariable("id") long id){
+        log.info("Se ha devuelto el nombre del curso");
+        return usuarioService.getNombreCurso(id);
+
+    }
 
 }

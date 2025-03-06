@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UsuarioService {
@@ -70,5 +71,19 @@ public class UsuarioService {
     public void deleteAll() {
         this.usuarioRepository.deleteAll();
         System.out.println("Todos los usuarios han sido eliminados de la base de datos");
+    }
+
+    public String getNombreCurso(Long id) {
+        Optional<Usuario> usuario = usuarioRepository.findById(id);
+        if (usuario.isPresent()) {
+            if (usuario.get().getCurso() != null) {
+                return usuario.get().getCurso().getNombre();
+            } else {
+                return "El usuario no tiene un curso asignado";
+            }
+        } else {
+            return "usuario no encontrado";
+        }
+
     }
 }
