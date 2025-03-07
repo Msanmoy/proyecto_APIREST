@@ -1,11 +1,11 @@
 package com.iesvdm.proyectoapi.services;
 
 import com.iesvdm.proyectoapi.domain.Tarea;
-import com.iesvdm.proyectoapi.exception.NotFoundException;
 import com.iesvdm.proyectoapi.repository.TareaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class TareaService {
@@ -16,12 +16,12 @@ public class TareaService {
         this.tareaRepository = tareaRepository;
     }
 
-    public Tarea one(long id) {
-        return this.tareaRepository.findById(id).orElseThrow(() -> new NotFoundException(id, "tarea"));
+    public java.util.Optional<Tarea> obtenerTareaPorId(Long id) {
+        return tareaRepository.findById(id);
     }
 
     public Tarea cambiarNombre(Tarea t, Tarea tarea) {
-        if (t.getId() == tarea.getId()) {
+        if (Objects.equals(t.getId(), tarea.getId())) {
             t.setTitulo(tarea.getTitulo());
             return this.tareaRepository.save(t);
         }

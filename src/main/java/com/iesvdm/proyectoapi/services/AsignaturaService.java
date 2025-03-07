@@ -16,8 +16,8 @@ public class AsignaturaService {
         return asignaturaRepository.findAll();
     }
 
-    public Asignatura crearAsignatura(Asignatura asignatura) {
-        return asignaturaRepository.save(asignatura);
+    public void crearAsignatura(Asignatura asignatura) {
+        asignaturaRepository.save(asignatura);
     }
 
     public java.util.Optional<Asignatura> obtenerAsignaturaPorId(Long id) {

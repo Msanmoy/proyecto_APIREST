@@ -3,7 +3,7 @@ package com.iesvdm.proyectoapi.domain;
 import lombok.*;
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 @Entity
@@ -18,9 +18,23 @@ public class Tarea implements Comparable<Tarea>{
     private Long id;
     private String titulo;
     private String descripcion;
-    private LocalDate fechaEntrega;
+    private LocalDateTime fechaEntrega;
+
     @ManyToOne
+    @JoinTable(
+            name = "asignatura_tareas",
+            joinColumns = @JoinColumn(name = "tareas_id"),
+            inverseJoinColumns = @JoinColumn(name = "asignatura_id")
+    )
     private Asignatura asignatura;
+
+    @ManyToOne
+    @JoinTable(
+            name = "calendario_tareas",
+            joinColumns = @JoinColumn(name = "tareas_id"),
+            inverseJoinColumns = @JoinColumn(name = "calendario_id")
+    )
+    private Calendario calendario;
 
     @Override
     public int compareTo(Tarea o) {

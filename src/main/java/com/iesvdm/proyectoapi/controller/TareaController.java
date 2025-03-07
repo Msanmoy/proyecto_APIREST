@@ -1,6 +1,7 @@
 package com.iesvdm.proyectoapi.controller;
 
 import com.iesvdm.proyectoapi.domain.Tarea;
+import com.iesvdm.proyectoapi.exception.NotFoundException;
 import com.iesvdm.proyectoapi.repository.TareaRepository;
 import com.iesvdm.proyectoapi.services.TareaService;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 
 @Slf4j
@@ -23,8 +26,13 @@ public class TareaController {
 
     @PutMapping("/{id}/cambiarNombre")
     public Tarea cambiarNombre(@PathVariable("id") long id, @RequestBody Tarea tarea) {
-        Tarea t = tareaService.one(id);
-        return this.tareaService.cambiarNombre(t, tarea);
+        Optional<Tarea> t = tareaService.obtenerTareaPorId(id);
+        if (t.isPresent()) {
+            return this.tareaService.cambiarNombre(t.get(), tarea);
+        } else {
+            return new Tarea();
+        }
+
     }
 
     @GetMapping

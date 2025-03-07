@@ -15,9 +15,11 @@ public class Curso {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nombre;
-    @ManyToMany
+    @ManyToMany(mappedBy = "cursos")
     private Set<Asignatura> asignaturas;
-
-    @OneToMany(mappedBy = "curso")
+    @OneToMany(mappedBy = "curso", cascade = {
+            CascadeType.PERSIST, CascadeType.MERGE
+    })
     private Set<Usuario> usuario;
+
 }

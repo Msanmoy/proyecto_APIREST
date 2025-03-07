@@ -1,14 +1,11 @@
 package com.iesvdm.proyectoapi.services;
 
 import com.iesvdm.proyectoapi.domain.*;
-import com.iesvdm.proyectoapi.enums.Rol;
 import com.iesvdm.proyectoapi.exception.NotFoundException;
 import com.iesvdm.proyectoapi.repository.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.*;
-
-import java.util.List;
 import java.util.Optional;
 
 @Service

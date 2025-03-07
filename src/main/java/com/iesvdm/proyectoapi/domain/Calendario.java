@@ -14,8 +14,19 @@ public class Calendario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.REMOVE)
+    @JoinTable(
+            name = "calendario_tareas",
+            joinColumns = @JoinColumn(name = "calendario_id"),
+            inverseJoinColumns = @JoinColumn(name = "tareas_id")
+    )
     private Set<Tarea> tareas;
-    @OneToMany
+
+    @OneToMany(cascade = CascadeType.REMOVE)
+    @JoinTable(
+            name = "calendario_examenes",
+            joinColumns = @JoinColumn(name = "calendario_id"),
+            inverseJoinColumns = @JoinColumn(name = "examenes_id")
+    )
     private Set<Examen> examenes;
 }

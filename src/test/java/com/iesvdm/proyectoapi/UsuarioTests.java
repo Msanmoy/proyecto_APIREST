@@ -3,7 +3,6 @@ package com.iesvdm.proyectoapi;
 import com.iesvdm.proyectoapi.controller.UsuarioController;
 import com.iesvdm.proyectoapi.domain.Usuario;
 import com.iesvdm.proyectoapi.enums.Rol;
-import com.iesvdm.proyectoapi.exception.NotFoundException;
 import com.iesvdm.proyectoapi.repository.UsuarioRepository;
 import com.iesvdm.proyectoapi.services.UsuarioService;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,12 +15,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
-class ProyectoApiApplicationTests {
+class UsuarioTests {
     @Autowired
     private UsuarioService usuarioService;
 
@@ -98,13 +99,6 @@ class ProyectoApiApplicationTests {
     }
 
     @Test
-    void testBuscarUsuarioPorId() {
-        Usuario prueba = usuarioController.one(1L);
-        assertNotNull(prueba);
-        assertEquals("prueba1", prueba.getNombre());
-    }
-
-    @Test
     void testReplaceUsuario() {
         Usuario usuarioNuevo = new Usuario();
 
@@ -145,6 +139,37 @@ class ProyectoApiApplicationTests {
         assertNotNull(usuario1);
         assertEquals(contraseniaNueva, usuario1.getPassword());
         assertNotEquals(contraseniaAntigua, usuario1.getPassword());
+    }
+
+    @Test
+    void testBuscarUsuarioPorId() {
+        Usuario usuario = new Usuario();
+        usuario.setNombre("prueba1");
+        usuario.setApellidos("Prueba");
+        usuario.setEmail("prueba123@g.educaand.es");
+        usuario.setPassword("123456");
+        usuario.setRol(Rol.ALUMNO);
+
+        usuarioService.crearUsuario(usuario);
+
+        Optional<Usuario> prueba = usuarioRepository.findByEmail("prueba123@g.educaand.es");
+        assertTrue(prueba.isPresent());
+        assertNotNull(prueba);
+        assertEquals("prueba1", prueba.get().getNombre());
+    }
+
+    @Test
+    void testBuscarUsuarioPorEmail() {
+        Usuario usuario = new Usuario();
+        usuario.setNombre("prueba2");
+        usuario.setApellidos("Prueba");
+        usuario.setEmail("prueba1234@g.educaand.es");
+        usuario.setPassword("123456");
+        usuario.setRol(Rol.ALUMNO);
+
+        usuarioService.crearUsuario(usuario);
+
+        assertTrue(usuarioService.existsByEmail("prueba1234@g.educaand.es"));
     }
 
     @Test
