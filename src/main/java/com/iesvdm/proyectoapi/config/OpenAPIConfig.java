@@ -12,3 +12,10 @@ import org.springframework.context.annotation.Configuration;
 ))
 public class OpenAPIConfig {
 }
+
+/*
+*
+*   Genera documentación automática de la API usando Springdoc OpenAPI
+*   que es una librería para generar documentción automática de APIs en aplicaciones Spring Boot.
+*   Se implementará correctamente para entrega de proyecto
+* */

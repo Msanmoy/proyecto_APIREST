@@ -9,6 +9,7 @@ import java.util.List;
 
 @Service
 public class AsignaturaService {
+
     @Autowired
     private AsignaturaRepository asignaturaRepository;
 
@@ -24,11 +25,9 @@ public class AsignaturaService {
         return asignaturaRepository.findById(id);
     }
 
-    public boolean eliminarAsignatura(Long id) {
+    public void eliminarAsignatura(Long id) {
         if (asignaturaRepository.existsById(id)) {
             asignaturaRepository.deleteById(id);
-            return true;
         }
-        return false;
     }
 }

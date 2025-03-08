@@ -102,11 +102,7 @@ class UsuarioTests {
     void testReplaceUsuario() {
         Usuario usuarioNuevo = new Usuario();
 
-        usuarioNuevo.setNombre("Actualizado");
-        usuarioNuevo.setApellidos("Actualizado");
-        usuarioNuevo.setEmail("actualizado@g.educaand.es");
-        usuarioNuevo.setPassword("123456");
-        usuarioNuevo.setRol(Rol.PROFESOR);
+        usuarioNuevo.setNombre("Actualizado"); usuarioNuevo.setApellidos("Actualizado"); usuarioNuevo.setEmail("actualizado@g.educaand.es"); usuarioNuevo.setPassword("123456"); usuarioNuevo.setRol(Rol.PROFESOR);
 
         Pageable pageable = PageRequest.of(0,10);
 

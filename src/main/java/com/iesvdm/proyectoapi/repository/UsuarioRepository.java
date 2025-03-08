@@ -9,6 +9,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.Optional;
 
+// Personaliza la exposición de un repositorio JPA como una API REST automáticamente
 @RepositoryRestResource(collectionResourceRel = "usuarios", path = "usuarios")
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     @Query("SELECT u FROM Usuario u WHERE CONCAT(u.nombre, ' ', u.apellidos) LIKE %?1%")

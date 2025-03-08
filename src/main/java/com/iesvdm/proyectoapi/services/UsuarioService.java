@@ -37,7 +37,8 @@ public class UsuarioService {
     }
 
     public Usuario one(String email) {
-        return this.usuarioRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("Usuario con email: " + email + " no encontrado"));
+        return this.usuarioRepository.findByEmail(email).orElseThrow(() ->
+                new NotFoundException("Usuario con email: " + email + " no encontrado"));
     }
 
     public Usuario replace(Long id, Usuario usuario) {
